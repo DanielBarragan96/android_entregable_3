@@ -1,6 +1,8 @@
 import 'package:entregable_2/colors.dart';
 import 'package:entregable_2/home/bloc/home_bloc.dart';
 import 'package:entregable_2/home/drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -25,6 +27,20 @@ List<Map<String, dynamic>> _data = [
 ];
 
 Widget menuChatPage(HomeBloc _bloc, BuildContext context) {
+  User _user = FirebaseAuth.instance.currentUser;
+  DatabaseReference _firebaseDatabase = FirebaseDatabase.instance
+      .reference()
+      .child("profiles/${_user.uid}/chats");
+
+  _firebaseDatabase.once().then((dataSnapShot) {
+    Map chats = dataSnapShot.value;
+    // for (var chat in chats) {
+    //   print(chat);
+    // }
+    //TODO this works only when there's 1 chat
+    print(chats.entries.single.key);
+  });
+
   return Scaffold(
     backgroundColor: kBlack,
     drawer: DrawerWidget(),
