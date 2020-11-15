@@ -84,27 +84,34 @@ class _HomePageState extends State<SingleChatPage> {
   }
 
   _messageFromData(DataSnapshot resultado, Animation<double> animation) {
+    //get message content
     final String msgTxt = resultado.value["text"] ?? "--";
     final int sentTime = resultado.value["timestamp"] ?? 0;
     final String senderId = resultado.value["senderId"] ?? "";
+    // final String senderPhotoUrl = resultado.value["senderPhotoUrl"];
 
+    //calculate position
+    const int MAX_LETTER = 30;
+    const int MIN_LETTER = 16;
+    const int LETTER_SIZE = 10;
     bool isMe = senderId == _user.uid;
     double screenW75 = MediaQuery.of(context).size.width * 0.75;
-    double screenW60 = MediaQuery.of(context).size.width * 0.6;
     double screenW25 = MediaQuery.of(context).size.width * 0.25;
     double minMsgW = 240;
 
-    double msgMargin = (msgTxt.length < 16)
+    //validate position
+    double msgMargin = (msgTxt.length < MIN_LETTER)
         ? minMsgW
-        : (msgTxt.length < 30)
-            ? minMsgW - (msgTxt.length - 16) * 10
+        : (msgTxt.length < MAX_LETTER)
+            ? minMsgW - (msgTxt.length - MIN_LETTER) * LETTER_SIZE
             : screenW25;
 
+    //parse time as String
     final String sentTimeString = DateTime.fromMillisecondsSinceEpoch(sentTime)
         .toString()
-        .substring(0, 16);
-    // final String senderPhotoUrl = resultado.value["senderPhotoUrl"];
+        .substring(11, 16);
 
+    //create message widget
     return Container(
       constraints: BoxConstraints(maxWidth: 100),
       margin: (isMe)
