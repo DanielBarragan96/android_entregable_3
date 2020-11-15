@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_ml_vision/firebase_ml_vision.dart';
+// import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -23,10 +23,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         yield Error();
       else {
         String data = "";
-        if (event.barcodeScan)
-          data = await _barcodeScan(img);
-        else
-          data = await _imgLabeling(img);
+        // if (event.barcodeScan)
+        //   data = await _barcodeScan(img);
+        // else
+        //   data = await _imgLabeling(img);
         yield Results(result: data, chosenImage: img);
       }
     } else if (event is MenuStatsEvent) {
@@ -40,52 +40,31 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  Future<String> _barcodeScan(File imageFile) async {
-    var visionImage = FirebaseVisionImage.fromFile(imageFile);
-    var barcode = FirebaseVision.instance.barcodeDetector();
-    List<Barcode> codes = await barcode.detectInImage(visionImage);
+  // Future<String> _barcodeScan(File imageFile) async {
+  //   var visionImage = FirebaseVisionImage.fromFile(imageFile);
+  //   var barcode = FirebaseVision.instance.barcodeDetector();
+  //   List<Barcode> codes = await barcode.detectInImage(visionImage);
 
-    String data = "";
-    for (var item in codes) {
-      var code = item.rawValue;
-      var type = item.valueType;
-      var boundBox = item.boundingBox;
-      var corners = item.cornerPoints;
-      var url = item.url;
+  //   String data = "";
+  //   for (var item in codes) {
+  //     var code = item.rawValue;
+  //     var type = item.valueType;
+  //     var boundBox = item.boundingBox;
+  //     var corners = item.cornerPoints;
+  //     var url = item.url;
 
-      data += '''
-      > Codigo $code\n
-      > Formato: $type\n
-      > URL titulo: ${url == null ? "No disponible" : url.title}\n
-      > URL: ${url == null ? "No disponible" : url}\n
-      > Area de cod: $boundBox\n
-      > Esquinas: $corners\n
-      -----------------\n
-      ''';
-    }
-    return data;
-  }
-
-  Future<String> _imgLabeling(File imageFile) async {
-    var visionImage = FirebaseVisionImage.fromFile(imageFile);
-    var labelDetector = FirebaseVision.instance.imageLabeler();
-    List<ImageLabel> labels = await labelDetector.processImage(visionImage);
-
-    String data = "";
-    for (var item in labels) {
-      String id = item.entityId;
-      String label = item.text;
-      double prob = item.confidence;
-
-      data += '''
-      > Id: $id\n
-      > Label: $label\n
-      > Certeza: $prob\n
-      -----------------\n
-      ''';
-    }
-    return data;
-  }
+  //     data += '''
+  //     > Codigo $code\n
+  //     > Formato: $type\n
+  //     > URL titulo: ${url == null ? "No disponible" : url.title}\n
+  //     > URL: ${url == null ? "No disponible" : url}\n
+  //     > Area de cod: $boundBox\n
+  //     > Esquinas: $corners\n
+  //     -----------------\n
+  //     ''';
+  //   }
+  //   return data;
+  // }
 
   Future<File> _chooseImage() async {
     final picker = ImagePicker();

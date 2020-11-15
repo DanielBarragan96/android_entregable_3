@@ -47,7 +47,11 @@ class _HomePageState extends State<HomePage> {
               return menuChatPage(_bloc, context);
             }
             if (state is SingleChatState) {
-              return singleChatPage(_bloc, context, state.userName);
+              return SingleChatPage(
+                bloc: _bloc,
+                context: context,
+                userName: state.userName,
+              );
             } else
               return Center();
           },
