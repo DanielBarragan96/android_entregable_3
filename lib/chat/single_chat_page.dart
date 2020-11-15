@@ -90,16 +90,15 @@ class _HomePageState extends State<SingleChatPage> {
 
     bool isMe = senderId == _user.uid;
     double screenW75 = MediaQuery.of(context).size.width * 0.75;
+    double screenW60 = MediaQuery.of(context).size.width * 0.6;
     double screenW25 = MediaQuery.of(context).size.width * 0.25;
-    double minMsgW = 245;
-    double fontSize = MediaQuery.of(context).textScaleFactor;
+    double minMsgW = 240;
 
-    double msgMargin = screenW25;
-    if (isMe && msgTxt.length < 30) {
-      msgMargin = (screenW75 * 4 / 5) - (msgTxt.length);
-    } else if (msgTxt.length < 30) {
-      msgMargin = (msgMargin < minMsgW) ? minMsgW : msgMargin;
-    }
+    double msgMargin = (msgTxt.length < 16)
+        ? minMsgW
+        : (msgTxt.length < 30)
+            ? minMsgW - (msgTxt.length - 16) * 10
+            : screenW25;
 
     final String sentTimeString = DateTime.fromMillisecondsSinceEpoch(sentTime)
         .toString()
@@ -107,7 +106,7 @@ class _HomePageState extends State<SingleChatPage> {
     // final String senderPhotoUrl = resultado.value["senderPhotoUrl"];
 
     return Container(
-      alignment: (isMe) ? Alignment.topRight : Alignment.topLeft,
+      constraints: BoxConstraints(maxWidth: 100),
       margin: (isMe)
           ? EdgeInsets.only(top: 8.0, bottom: 8.0, right: 20, left: msgMargin)
           : EdgeInsets.only(top: 8.0, bottom: 8.0, right: msgMargin, left: 20),
