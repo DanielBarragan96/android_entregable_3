@@ -150,7 +150,7 @@ class _LoginFormState extends State<LoginForm> {
               },
               builder: (context, state) {
                 if (state is LoginSuccessState) {
-                  return HomePage();
+                  return HomePage(loginBloc: _loginBloc);
                 }
                 return SingleChildScrollView(
                   child: Container(

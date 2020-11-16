@@ -34,6 +34,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield LoginErrorState(
             error: "Error while trying to sign in with Google");
       }
+    } else if (event is LogoutWithGoogleEvent) {
+      try {
+        if (_authProvider.isAlreadyLogged()) {
+          _authProvider.signOutGoogle();
+          yield LoginInitial();
+        }
+      } catch (e) {}
     } else if (event is LoginWithEmailEvent) {
       //TODO sign with email implementation
       yield LoginSuccessState();

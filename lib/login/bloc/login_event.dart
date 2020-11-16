@@ -22,6 +22,11 @@ class LoginWithGoogleEvent extends LoginEvent {
   List<Object> get props => [];
 }
 
+class LogoutWithGoogleEvent extends LoginEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class LoginWithEmailEvent extends LoginEvent {
   @override
   List<Object> get props => [];

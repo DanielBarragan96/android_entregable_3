@@ -1,20 +1,34 @@
+import 'package:entregable_2/auth/user_auth_provider.dart';
 import 'package:entregable_2/colors.dart';
+import 'package:entregable_2/login/bloc/login_bloc.dart';
+import 'package:entregable_2/login/login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class DrawerWidget extends StatefulWidget {
-  DrawerWidget({Key key}) : super(key: key);
+  final LoginBloc loginBloc;
+
+  DrawerWidget({Key key, this.loginBloc}) : super(key: key);
 
   @override
   _DrawerWidgetState createState() => _DrawerWidgetState();
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
+  User _user;
+
+  @override
+  void initState() {
+    _user = FirebaseAuth.instance.currentUser;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("PROFILE_TITLE"),
+          title: Text(""),
         ),
         body: Padding(
           padding: EdgeInsets.all(24.0),
@@ -24,18 +38,24 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Container(
-                    height: 150,
-                    child: CircleAvatar(
-                      backgroundColor: kMainPurple,
-                      minRadius: 40,
-                      maxRadius: 80,
-                    ),
+                    child: (_user.photoURL != "")
+                        ? Image.network(
+                            _user.photoURL,
+                            alignment: Alignment.center,
+                            fit: BoxFit.scaleDown,
+                            height: 80,
+                          )
+                        : CircleAvatar(
+                            backgroundColor: kMainPurple,
+                            minRadius: 40,
+                            maxRadius: 80,
+                          ),
                   ),
                   SizedBox(
                     height: 16,
                   ),
                   Text(
-                    "PROFILE_NAME",
+                    "${_user.displayName}",
                     style: Theme.of(context)
                         .textTheme
                         .headline4
@@ -44,14 +64,19 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   SizedBox(
                     height: 8,
                   ),
-                  Text("PROFILE_EMAIL"),
+                  Text("${_user.email}"),
                   SizedBox(
                     height: 16,
                   ),
                   ListTile(
-                    title: Text("PROFILE_SETTINGS"),
+                    title: Text("Ajustes"),
                     leading: Icon(Icons.settings),
-                    onTap: () {},
+                    onTap: () {
+                      if (widget.loginBloc != null) {
+                        widget.loginBloc.add(LogoutWithGoogleEvent());
+                        return LoginPage();
+                      }
+                    },
                   ),
                 ],
               ),
@@ -63,7 +88,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     Expanded(
                       child: RaisedButton(
                         child: Text("Log out"),
-                        onPressed: () {},
+                        onPressed: () {
+                          widget.loginBloc.add(LogoutWithGoogleEvent());
+                        },
                       ),
                     ),
                   ],
