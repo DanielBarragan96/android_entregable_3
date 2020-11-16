@@ -44,10 +44,17 @@ class _HomePageState extends State<HomePage> {
               return menuMapPage(_bloc, context);
             }
             if (state is MenuChatState) {
-              return menuChatPage(_bloc, context);
+              return MenuChatPage(
+                bloc: _bloc,
+                context: context,
+              );
             }
             if (state is SingleChatState) {
-              return singleChatPage(_bloc, context, state.userName);
+              return SingleChatPage(
+                bloc: _bloc,
+                context: context,
+                userChat: state.userName,
+              );
             } else
               return Center();
           },

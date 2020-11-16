@@ -31,7 +31,7 @@ class MenuChatEvent extends HomeEvent {
 }
 
 class SingleChatEvent extends HomeEvent {
-  final String userName;
+  final Map<String, dynamic> userName;
 
   SingleChatEvent({@required this.userName});
 

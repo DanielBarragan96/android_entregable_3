@@ -42,7 +42,7 @@ class MenuChatState extends HomeState {
 }
 
 class SingleChatState extends HomeState {
-  final String userName;
+  final Map<String, dynamic> userName;
 
   SingleChatState({@required this.userName});
   @override
