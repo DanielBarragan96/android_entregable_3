@@ -22,9 +22,19 @@ class LoginWithGoogleEvent extends LoginEvent {
   List<Object> get props => [];
 }
 
-class LoginWithEmailEvent extends LoginEvent {
+class LogoutWithGoogleEvent extends LoginEvent {
   @override
   List<Object> get props => [];
+}
+
+class LoginWithEmailEvent extends LoginEvent {
+  final String email;
+  final String password;
+
+  LoginWithEmailEvent(this.email, this.password);
+
+  @override
+  List<Object> get props => [email, password];
 }
 
 class ForgotPasswordEvent extends LoginEvent {
