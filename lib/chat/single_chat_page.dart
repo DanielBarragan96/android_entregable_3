@@ -10,13 +10,13 @@ import '../colors.dart';
 class SingleChatPage extends StatefulWidget {
   final HomeBloc bloc;
   final BuildContext context;
-  final String userName;
+  final Map<String, dynamic> userChat;
 
   SingleChatPage({
     Key key,
     @required this.bloc,
     @required this.context,
-    @required this.userName,
+    @required this.userChat,
   }) : super(key: key);
 
   @override
@@ -25,7 +25,6 @@ class SingleChatPage extends StatefulWidget {
 
 class _HomePageState extends State<SingleChatPage> {
   User _user;
-  User _user2;
   DatabaseReference _firebaseDatabase;
   DatabaseReference _firebaseDatabase2;
   final _textController = TextEditingController();
@@ -33,13 +32,12 @@ class _HomePageState extends State<SingleChatPage> {
   @override
   void initState() {
     _user = FirebaseAuth.instance.currentUser;
-    _user2 = _user;
     _firebaseDatabase = FirebaseDatabase.instance
         .reference()
-        .child("profiles/${_user.uid}/chats/id_user2/messages");
+        .child("profiles/${_user.uid}/chats/${widget.userChat["id"]}/messages");
     _firebaseDatabase2 = FirebaseDatabase.instance
         .reference()
-        .child("profiles/id_user2/chats/${_user.uid}/messages");
+        .child("profiles/${widget.userChat["id"]}/chats/${_user.uid}/messages");
     super.initState();
   }
 
@@ -56,7 +54,7 @@ class _HomePageState extends State<SingleChatPage> {
           iconSize: 20.0,
           color: kWhite,
         ),
-        title: Text("${widget.userName}"),
+        title: Text("${widget.userChat["name"]}"),
       ),
       body: Center(
         child: Column(
@@ -107,9 +105,11 @@ class _HomePageState extends State<SingleChatPage> {
             : screenW25;
 
     //parse time as String
-    final String sentTimeString = DateTime.fromMillisecondsSinceEpoch(sentTime)
-        .toString()
-        .substring(11, 16);
+    final String sentTimeString = (sentTime == 0)
+        ? ""
+        : DateTime.fromMillisecondsSinceEpoch(sentTime)
+            .toString()
+            .substring(11, 16);
 
     //create message widget
     return Container(
@@ -209,13 +209,13 @@ class _HomePageState extends State<SingleChatPage> {
       "timestamp": DateTime.now().millisecondsSinceEpoch,
       "senderPhotoUrl": _user.photoURL,
     });
-    //TODO copia chat user 2
-    // _firebaseDatabase2.push().set({
-    //   "senderName": _user.displayName,
-    //   "senderId": _user.uid,
-    //   "text": text,
-    //   "timestamp": DateTime.now().millisecondsSinceEpoch,
-    //   "senderPhotoUrl": _user.photoURL,
-    // });
+    //copia chat user 2
+    _firebaseDatabase2.push().set({
+      "senderName": _user.displayName,
+      "senderId": _user.uid,
+      "text": text,
+      "timestamp": DateTime.now().millisecondsSinceEpoch,
+      "senderPhotoUrl": _user.photoURL,
+    });
   }
 }
