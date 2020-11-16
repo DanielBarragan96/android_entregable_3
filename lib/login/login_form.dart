@@ -15,6 +15,8 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   LoginBloc _loginBloc;
   bool _showLoading = false;
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
@@ -48,7 +50,7 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextField(),
+                  child: TextField(controller: _emailController),
                 ),
                 SizedBox(height: 40),
                 Container(
@@ -59,6 +61,7 @@ class _LoginFormState extends State<LoginForm> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: TextField(
+                    controller: _passwordController,
                     obscureText: true,
                   ),
                 ),
@@ -69,7 +72,8 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                   onPressed: () {
                     Navigator.pop(context);
-                    _loginBloc.add(LoginWithEmailEvent());
+                    _loginBloc.add(LoginWithEmailEvent(
+                        _emailController.text, _passwordController.text));
                   },
                   child: Text(
                     "Login",
@@ -93,11 +97,6 @@ class _LoginFormState extends State<LoginForm> {
     // recodar configurar pantallad Oauth en google Cloud
     print("google");
     _loginBloc.add(LoginWithGoogleEvent());
-  }
-
-  void _facebookLogIn(bool _) {
-    // invocar al login de firebase con el bloc
-    print("facebook");
   }
 
   @override
@@ -157,7 +156,6 @@ class _LoginFormState extends State<LoginForm> {
                     alignment: Alignment.center,
                     margin: EdgeInsets.symmetric(horizontal: 15, vertical: 30),
                     child: FormBody(
-                      onFacebookLoginTap: _facebookLogIn,
                       onGoogleLoginTap: _googleLogIn,
                       onEmailLoginTap: _emailLogIn,
                     ),

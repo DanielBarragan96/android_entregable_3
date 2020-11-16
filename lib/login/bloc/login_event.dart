@@ -28,8 +28,13 @@ class LogoutWithGoogleEvent extends LoginEvent {
 }
 
 class LoginWithEmailEvent extends LoginEvent {
+  final String email;
+  final String password;
+
+  LoginWithEmailEvent(this.email, this.password);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [email, password];
 }
 
 class ForgotPasswordEvent extends LoginEvent {

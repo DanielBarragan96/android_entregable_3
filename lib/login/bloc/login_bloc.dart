@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:entregable_2/auth/user_auth_provider.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 part 'login_event.dart';
@@ -10,6 +11,7 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   UserAuthProvider _authProvider = UserAuthProvider();
+  FirebaseAuth mAuth = FirebaseAuth.instance;
   LoginBloc() : super(LoginInitial());
 
   @override
@@ -42,8 +44,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         }
       } catch (e) {}
     } else if (event is LoginWithEmailEvent) {
-      //TODO sign with email implementation
-      yield LoginSuccessState();
+      try {
+        mAuth.signInWithEmailAndPassword(
+          email: event.email,
+          password: event.password,
+        );
+        yield LoginSuccessState();
+      } catch (e) {}
     }
   }
 }

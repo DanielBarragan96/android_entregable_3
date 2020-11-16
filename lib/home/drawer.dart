@@ -38,7 +38,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Container(
-                    child: (_user.photoURL != "")
+                    child: (_user.photoURL != "" && _user.photoURL != null)
                         ? Image.network(
                             _user.photoURL,
                             alignment: Alignment.center,
@@ -55,7 +55,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     height: 16,
                   ),
                   Text(
-                    "${_user.displayName}",
+                    "${_user.displayName ?? ""}",
                     style: Theme.of(context)
                         .textTheme
                         .headline4
