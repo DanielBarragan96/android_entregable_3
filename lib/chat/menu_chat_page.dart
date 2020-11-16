@@ -7,38 +7,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-List<Map<String, dynamic>> _data = [
-  {
-    "picture": "https://randomuser.me/api/portraits/men/0.jpg",
-    "name": "Juan Perez",
-  },
-  {
-    "picture": "https://randomuser.me/api/portraits/men/1.jpg",
-    "name": "Juan Perez 2",
-  },
-  {
-    "picture": "https://randomuser.me/api/portraits/men/2.jpg",
-    "name": "Juan Perez 3",
-  },
-  {
-    "picture": "https://randomuser.me/api/portraits/men/3.jpg",
-    "name": "Juan Perez 4",
-  },
-];
-
 Widget menuChatPage(HomeBloc _bloc, BuildContext context) {
+  List<Map<String, dynamic>> _data = [];
+  //   {
+  //     "picture": "https://randomuser.me/api/portraits/men/0.jpg",
+  //     "name": "Juan Perez",
+  //   },
+  //   {
+  //     "picture": "https://randomuser.me/api/portraits/men/1.jpg",
+  //     "name": "Juan Perez 2",
+  //   },
+  //   {
+  //     "picture": "https://randomuser.me/api/portraits/men/2.jpg",
+  //     "name": "Juan Perez 3",
+  //   },
+  //   {
+  //     "picture": "https://randomuser.me/api/portraits/men/3.jpg",
+  //     "name": "Juan Perez 4",
+  //   },
+  // ];
+
   User _user = FirebaseAuth.instance.currentUser;
   DatabaseReference _firebaseDatabase = FirebaseDatabase.instance
       .reference()
-      .child("profiles/${_user.uid}/chats");
+      .child("profiles/${_user.uid}/chats/");
 
   _firebaseDatabase.once().then((dataSnapShot) {
     Map chats = dataSnapShot.value;
-    // for (var chat in chats) {
-    //   print(chat);
-    // }
-    //TODO this works only when there's 1 chat
-    print(chats.entries.single.key);
+    chats.forEach((key, value) {
+      // print(key);
+      _data.add({"picture": "", "name": "${key.toString()}"});
+    });
   });
 
   return Scaffold(
