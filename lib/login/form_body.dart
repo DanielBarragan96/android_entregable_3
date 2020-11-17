@@ -9,13 +9,11 @@ class FormBody extends StatelessWidget {
   // cambiar a un solo value changed que reciba enum de login
   final ValueChanged<bool> onEmailLoginTap;
   final ValueChanged<bool> onGoogleLoginTap;
-  final ValueChanged<bool> onFacebookLoginTap;
 
   FormBody({
     Key key,
     @required this.onEmailLoginTap,
     @required this.onGoogleLoginTap,
-    @required this.onFacebookLoginTap,
   }) : super(key: key);
 
   @override
