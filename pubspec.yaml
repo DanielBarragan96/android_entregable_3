@@ -34,8 +34,8 @@ dependencies:
   firebase_core: ^0.5.0
   firebase_ml_vision: ^0.9.7
   google_sign_in: ^4.5.3
-  google_maps_flutter: ^0.5.27+3
-  geolocator: ^6.0.0+4
+  google_maps_flutter: ^1.0.6
+  geolocator: ^6.1.4
   geocoding: ^1.0.5
   share: ^0.6.5+3
   charts_flutter: ^0.8.1
@@ -43,6 +43,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
+  flutter_launcher_icons: "^0.8.0"
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo_app.png"  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
