@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: kBlack,
       body: BlocProvider(
         create: (context) {
-          _bloc = HomeBloc();
+          _bloc = HomeBloc(loginBloc: widget.loginBloc);
           return _bloc;
         },
         child: BlocBuilder<HomeBloc, HomeState>(
@@ -49,7 +49,6 @@ class _HomePageState extends State<HomePage> {
             }
             if (state is MenuChatState) {
               return MenuChatPage(
-                loginBloc: widget.loginBloc,
                 bloc: _bloc,
                 context: context,
               );

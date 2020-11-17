@@ -2,16 +2,21 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:entregable_2/login/bloc/login_bloc.dart';
+import 'package:entregable_2/login/login_page.dart';
 import 'package:equatable/equatable.dart';
 // import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(MenuStatsState());
+  final LoginBloc loginBloc;
+
+  HomeBloc({@required this.loginBloc}) : super(MenuStatsState());
 
   @override
   Stream<HomeState> mapEventToState(
@@ -75,5 +80,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       imageQuality: 85,
     );
     return File(chooseImage.path);
+  }
+
+  Widget logout() {
+    this.loginBloc.add(LogoutWithGoogleEvent());
+    return LoginPage();
   }
 }

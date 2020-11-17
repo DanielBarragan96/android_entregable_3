@@ -1,14 +1,14 @@
-import 'package:entregable_2/auth/user_auth_provider.dart';
 import 'package:entregable_2/colors.dart';
+import 'package:entregable_2/home/bloc/home_bloc.dart';
 import 'package:entregable_2/login/bloc/login_bloc.dart';
-import 'package:entregable_2/login/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class DrawerWidget extends StatefulWidget {
-  final LoginBloc loginBloc;
+  final HomeBloc bloc;
 
-  DrawerWidget({Key key, this.loginBloc}) : super(key: key);
+  //TODO hacer bloc required para mapa y para stats
+  DrawerWidget({Key key, this.bloc}) : super(key: key);
 
   @override
   _DrawerWidgetState createState() => _DrawerWidgetState();
@@ -71,12 +71,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   ListTile(
                     title: Text("Ajustes"),
                     leading: Icon(Icons.settings),
-                    onTap: () {
-                      if (widget.loginBloc != null) {
-                        widget.loginBloc.add(LogoutWithGoogleEvent());
-                        return LoginPage();
-                      }
-                    },
+                    onTap: () {},
                   ),
                 ],
               ),
@@ -89,7 +84,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       child: RaisedButton(
                         child: Text("Log out"),
                         onPressed: () {
-                          widget.loginBloc.add(LogoutWithGoogleEvent());
+                          if (widget.bloc != null) {
+                            return widget.bloc.logout();
+                          }
                         },
                       ),
                     ),

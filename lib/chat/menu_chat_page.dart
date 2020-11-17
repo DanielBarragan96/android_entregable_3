@@ -1,7 +1,6 @@
 import 'package:entregable_2/colors.dart';
 import 'package:entregable_2/home/bloc/home_bloc.dart';
 import 'package:entregable_2/home/drawer.dart';
-import 'package:entregable_2/login/bloc/login_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -9,13 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MenuChatPage extends StatefulWidget {
-  final LoginBloc loginBloc;
   final HomeBloc bloc;
   final BuildContext context;
 
   MenuChatPage({
     Key key,
-    @required this.loginBloc,
     @required this.bloc,
     @required this.context,
   }) : super(key: key);
@@ -64,7 +61,7 @@ class _HomePageState extends State<MenuChatPage> {
     return Scaffold(
       backgroundColor: kBlack,
       drawer: DrawerWidget(
-        loginBloc: widget.loginBloc,
+        bloc: widget.bloc,
       ),
       appBar: AppBar(
         title: Text("Chat"),
