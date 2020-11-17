@@ -45,7 +45,10 @@ class _HomePageState extends State<HomePage> {
               return menuStatsPage(_bloc, context);
             }
             if (state is MenuMapState) {
-              return menuMapPage(_bloc, context);
+              return MapPage(
+                bloc: _bloc, 
+                context: context
+              );
             }
             if (state is MenuChatState) {
               return MenuChatPage(
