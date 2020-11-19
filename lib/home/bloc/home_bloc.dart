@@ -30,8 +30,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         String data = "";
         // if (event.barcodeScan)
         //   data = await _barcodeScan(img);
-        // else
-        //   data = await _imgLabeling(img);
         yield Results(result: data, chosenImage: img);
       }
     } else if (event is MenuStatsEvent) {
