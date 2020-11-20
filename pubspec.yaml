@@ -41,17 +41,18 @@ dependencies:
   geocoding: ^1.0.5
   share: ^0.6.5+3
   charts_flutter: ^0.8.1
+  http: ^0.12.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  
+
   flutter_launcher_icons: "^0.8.0"
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/logo_app.png"  
+  image_path: "assets/logo_app.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

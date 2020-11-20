@@ -1,20 +1,29 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:entregable_2/login/bloc/login_bloc.dart';
 import 'package:entregable_2/login/login_page.dart';
+import 'package:entregable_2/models/artist.dart';
+import 'package:entregable_2/models/track.dart';
 import 'package:equatable/equatable.dart';
 // import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final LoginBloc loginBloc;
+  http.Client _inner = http.Client();
+  List<Artist> topArtists = List();
+  List<Track> topTracks = List();
+  String SPOTIFY_API_KEY =
+      "BQCDb6qmW6xzakCEG1rf_f8Eb6tpyHdvTzHMJBEFVAgISXjndMT5QFSnk6nZL0jOWWP4CRZ02Owv5ybiq4j5eVAfj5WN2Y8g2HjBBwnAaLH_mP0y_uNYMV40HMKuccenPC6tI0OlfWiZPaRotV5hz9jYzLjQRR6Pqa7Fi8N2BC-k0GrIsJSADQ";
 
   HomeBloc({@required this.loginBloc}) : super(MenuStatsState());
 
@@ -30,8 +39,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         String data = "";
         // if (event.barcodeScan)
         //   data = await _barcodeScan(img);
-        // else
-        //   data = await _imgLabeling(img);
         yield Results(result: data, chosenImage: img);
       }
     } else if (event is MenuStatsEvent) {
@@ -42,6 +49,36 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       yield MenuChatState();
     } else if (event is SingleChatEvent) {
       yield SingleChatState(userName: event.userName);
+    } else if (event is LoadSpotifyStatsEvent) {
+      // get artists stats
+      var responseArtist = await getSpotifyArtistStats();
+      // decode json response
+      Map<String, dynamic> dataArtist = jsonDecode(responseArtist.body);
+
+      // create top artists list
+      topArtists = List();
+      for (var artist in dataArtist["items"])
+        topArtists.add(Artist(
+          artistName: "${artist["name"]}",
+        ));
+      // print(topArtists.toString());
+
+      // get tracks stats
+      var responseTrack = await getSpotifyTrackStats();
+      // decode json response
+      Map<String, dynamic> dataTrack = jsonDecode(responseTrack.body);
+
+      // create top tracks list
+      topTracks = List();
+      for (var track in dataTrack["items"]) {
+        topTracks.add(Track(
+          trackName: "${track["name"]}",
+          artistName: "${track["artists"][0]["name"]}",
+          albumName: "${track["album"]["name"]}",
+        ));
+      }
+      // print(topTracks.toString());
+      yield MenuStatsState();
     }
   }
 
@@ -85,5 +122,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Widget logout() {
     this.loginBloc.add(LogoutWithGoogleEvent());
     return LoginPage();
+  }
+
+  Future<http.Response> getSpotifyArtistStats() async {
+    String url = "https://api.spotify.com/v1/me/top/artists";
+
+    return http.get(url, headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $SPOTIFY_API_KEY',
+    });
+  }
+
+  Future<http.Response> getSpotifyTrackStats() async {
+    String url = "https://api.spotify.com/v1/me/top/tracks";
+
+    return http.get(url, headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $SPOTIFY_API_KEY',
+    });
   }
 }

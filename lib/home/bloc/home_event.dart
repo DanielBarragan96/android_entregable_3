@@ -38,3 +38,8 @@ class SingleChatEvent extends HomeEvent {
   @override
   List<Object> get props => [];
 }
+
+class LoadSpotifyStatsEvent extends HomeEvent {
+  @override
+  List<Object> get props => [];
+}
