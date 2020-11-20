@@ -20,8 +20,10 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final LoginBloc loginBloc;
   http.Client _inner = http.Client();
+  List<Artist> topArtists = List();
+  List<Track> topTracks = List();
   String SPOTIFY_API_KEY =
-      "BQCvudIzR_njq2Fo6Bj_6DmCdMY06duNtk2ioNVAKN6eNPGpNC50-JNbAWHLqZja127kgVpUNZJ5c1itKvVgaBM-XZEDyp3Wc1LT_468f2mQsbbDmWr1ZGnR9Piuhf16umf5OHf9zj3B4v7RWXdupv1pLVZE1WXlehD594Ov1yP92uf_HW-c5g";
+      "BQCDb6qmW6xzakCEG1rf_f8Eb6tpyHdvTzHMJBEFVAgISXjndMT5QFSnk6nZL0jOWWP4CRZ02Owv5ybiq4j5eVAfj5WN2Y8g2HjBBwnAaLH_mP0y_uNYMV40HMKuccenPC6tI0OlfWiZPaRotV5hz9jYzLjQRR6Pqa7Fi8N2BC-k0GrIsJSADQ";
 
   HomeBloc({@required this.loginBloc}) : super(MenuStatsState());
 
@@ -54,12 +56,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       Map<String, dynamic> dataArtist = jsonDecode(responseArtist.body);
 
       // create top artists list
-      List<Artist> topArtists = List();
+      topArtists = List();
       for (var artist in dataArtist["items"])
         topArtists.add(Artist(
           artistName: "${artist["name"]}",
         ));
-      print(topArtists.toString());
+      // print(topArtists.toString());
 
       // get tracks stats
       var responseTrack = await getSpotifyTrackStats();
@@ -67,7 +69,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       Map<String, dynamic> dataTrack = jsonDecode(responseTrack.body);
 
       // create top tracks list
-      List<Track> topTracks = List();
+      topTracks = List();
       for (var track in dataTrack["items"]) {
         topTracks.add(Track(
           trackName: "${track["name"]}",
@@ -75,7 +77,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           albumName: "${track["album"]["name"]}",
         ));
       }
-      print(topTracks.toString());
+      // print(topTracks.toString());
+      yield MenuStatsState();
     }
   }
 

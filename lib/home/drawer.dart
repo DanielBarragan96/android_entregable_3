@@ -1,6 +1,5 @@
 import 'package:entregable_2/colors.dart';
 import 'package:entregable_2/home/bloc/home_bloc.dart';
-import 'package:entregable_2/login/bloc/login_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
