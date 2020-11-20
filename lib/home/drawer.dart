@@ -73,6 +73,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     leading: Icon(Icons.settings),
                     onTap: () {},
                   ),
+                  ListTile(
+                    title: Text("Spotify stats"),
+                    leading: Icon(Icons.settings),
+                    onTap: () {
+                      widget.bloc.add(LoadSpotifyStatsEvent());
+                    },
+                  ),
                 ],
               ),
               Align(
