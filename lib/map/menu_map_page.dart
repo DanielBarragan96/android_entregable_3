@@ -1,6 +1,7 @@
 import 'package:entregable_2/colors.dart';
 import 'package:entregable_2/home/bloc/home_bloc.dart';
 import 'package:entregable_2/home/drawer.dart';
+import 'package:entregable_2/map/menu_map_data.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
@@ -8,108 +9,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:share/share.dart';
 
-class Users {
-  final LatLng coord;
-  final String firstname;
-  final String lastname;
-
-  Users(
-    {
-      @required this.coord,
-      @required this.firstname,
-      @required this.lastname
-    }
-  );
-}
-
-List<LatLng> _coords = [
-  LatLng(20.659684585453792, -103.45644380897282),
-  LatLng(20.58794293024975,  -103.41349761933088),
-  LatLng(20.709674113035824, -103.38253621011972),
-  LatLng(20.6232340206758,   -103.32710534334183),
-  LatLng(20.703134533765034, -103.29913996160033)  
-];
-
-final List<Users> _usersList = [
-  Users(
-    coord: _coords[0],
-    firstname: 'Juan',
-    lastname: 'Perez',
-  ),
-  Users(
-    coord: _coords[1],
-    firstname: 'Juan',
-    lastname: 'Colorado',
-  ),
-  Users(
-    coord: _coords[2],
-    firstname: 'Juan',
-    lastname: 'Escutia',
-  ),
-  Users(
-    coord: _coords[3],
-    firstname: 'Juan',
-    lastname: 'Lopez',
-  ),  
-  Users(
-    coord: _coords[4],
-    firstname: 'Juan',
-    lastname: 'De la Barrera',
-  ),         
-];
-
-Set<Marker> _mapMarkers = {
-  Marker(
-    markerId: MarkerId(_coords[0].toString()),
-    position: _coords[0],
-    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-    infoWindow: InfoWindow(
-      title: _coords[0].toString(),
-      //snippet: _getGeolocationAddress(Position(latitude: _coords[0].latitude, longitude: _coords[0].longitude)),
-    ),
-    onTap: () {},
-  ),
-  Marker(
-    markerId: MarkerId(_coords[1].toString()),
-    position: _coords[1],
-    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-    infoWindow: InfoWindow(
-      title: _coords[1].toString(),
-      //snippet: _getGeolocationAddress(Position(latitude: _coords[0].latitude, longitude: _coords[0].longitude)),
-    ),
-    onTap: () {},
-  ), 
-   Marker(
-    markerId: MarkerId(_coords[2].toString()),
-    position: _coords[2],
-    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-    infoWindow: InfoWindow(
-      title: _coords[2].toString(),
-      //snippet: _getGeolocationAddress(Position(latitude: _coords[0].latitude, longitude: _coords[0].longitude)),
-    ),
-    onTap: () {},
-  ), 
-   Marker(
-    markerId: MarkerId(_coords[3].toString()),
-    position: _coords[3],
-    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-    infoWindow: InfoWindow(
-      title: _coords[3].toString(),
-      //snippet: _getGeolocationAddress(Position(latitude: _coords[0].latitude, longitude: _coords[0].longitude)),
-    ),
-    onTap: () {},
-  ),
-   Marker(
-    markerId: MarkerId(_coords[4].toString()),
-    position: _coords[4],
-    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-    infoWindow: InfoWindow(
-      title: _coords[4].toString(),
-      //snippet: _getGeolocationAddress(Position(latitude: _coords[0].latitude, longitude: _coords[0].longitude)),
-    ),
-    onTap: () {},
-  ),         
-};
+List<Users> _usersList = getUsersList();
+Set<Marker> _mapMarkers = getMarkersSet();
 
 class MapPage extends StatefulWidget {
   final HomeBloc bloc;
@@ -145,7 +46,7 @@ class _MapPageState extends State<MapPage> {
           GoogleMap(
             onMapCreated: _onMapCreated,
             markers: _mapMarkers,
-            onLongPress: _setMarker,
+            onLongPress: null,
             initialCameraPosition: CameraPosition(
               target: _center,
               zoom: 11.0,
@@ -260,28 +161,6 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
-  void _setMarker(LatLng coord) async {
-    // add marker
-    setState(() {
-      _mapMarkers.add(
-        Marker(
-          markerId: MarkerId(coord.toString()),
-          position: coord,
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-          infoWindow: InfoWindow(
-            title: coord.toString(),
-            //snippet: _markerAddress,
-          ),
-          consumeTapEvents: true,
-          onTap: () async {
-
-          },
-        ),
-      );
-      //polygonLatLngs.add(coord);
-    });
-  }
-
   Future<String> _getGeolocationAddress(Position position) async {
     var places = await placemarkFromCoordinates(
       position.latitude,
@@ -329,6 +208,13 @@ class _MapPageState extends State<MapPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  Text(
+                    "${user.firstname} " + "${user.lastname}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),                              
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 40, horizontal: 120),
                     child: Placeholder(
@@ -336,17 +222,7 @@ class _MapPageState extends State<MapPage> {
                       fallbackHeight: 128,
                       fallbackWidth: 32,
                     ),
-                  ),                        
-                  Text(
-                    "${user.firstname} " + "${user.lastname}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),            
-                  SizedBox(
-                    height: 10,
-                  ),                        
+                  ),                       
                   Text(
                     address,
                     style: TextStyle(
@@ -362,8 +238,14 @@ class _MapPageState extends State<MapPage> {
                     children: <Widget>[
                       IconButton(
                         iconSize: 50,
-                        icon: Icon(Icons.favorite,color:Colors.red),
-                        onPressed: null
+                        color: user.liked? Colors.red:Colors.purple,
+                        icon: Icon(Icons.favorite),
+                        onPressed: (){
+                          user.liked = !user.liked;
+                          setState(() {});
+                          Navigator.of(context).pop();
+                          _showUserCard(context,_usersList[_user_index]);                
+                        }
                       ),   
                       SizedBox(
                         width: 20,
@@ -371,7 +253,10 @@ class _MapPageState extends State<MapPage> {
                       IconButton(
                         iconSize: 50,
                         icon: Icon(Icons.format_list_bulleted,color:Colors.purple),
-                        onPressed: null
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                          _showStasCard(context,user); 
+                        }
                       ),                         
                       SizedBox(
                         width: 20,
@@ -406,6 +291,154 @@ class _MapPageState extends State<MapPage> {
         ),
       ),
     );    
-  } 
+  }
+
+  void _showStasCard(BuildContext context, Users user) async {
+
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setModalState) {
+          return Padding(
+            padding: EdgeInsets.only(
+              top: 24.0,
+              left: 24,
+              right: 24,
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Container(
+              child: Column(
+                //mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "${user.firstname} " + "${user.lastname}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ), 
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget> [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget> [
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Image.network(
+                                user.imgsong,
+                                fit: BoxFit.fill,
+                                width: 140,
+                                height: 140,
+                              ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "${user.favsong}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ), 
+                        ],
+                      ),
+                      SizedBox(
+                        width: 40,
+                      ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget> [
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Image.network(
+                                user.imgartist,
+                                fit: BoxFit.fill,
+                                width: 140,
+                                height: 140,
+                              ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "${user.favartist}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),                           
+                        ],
+                      ),                      
+                    ],
+                  ),   
+                  SizedBox(
+                    height: 50,
+                  ),                                    
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      IconButton(
+                        iconSize: 50,
+                        color: user.liked? Colors.red:Colors.purple,
+                        icon: Icon(Icons.favorite),
+                        onPressed: (){
+                          user.liked = !user.liked;
+                          setState(() {});
+                          Navigator.of(context).pop();
+                          _showUserCard(context,_usersList[_user_index]);                
+                        }
+                      ),   
+                      SizedBox(
+                        width: 20,
+                      ),
+                      IconButton(
+                        iconSize: 50,
+                        icon: Icon(Icons.people,color:Colors.purple),
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                          _showUserCard(context,_usersList[_user_index]);                            
+                        }
+                      ),                         
+                      SizedBox(
+                        width: 20,
+                      ),                                                                   
+                      IconButton(
+                        iconSize: 50,
+                        icon: Icon(Icons.fast_forward,color:Colors.purple),
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                          setState((){                            
+                            _user_index++;
+                            if(_user_index == _usersList.length-1){
+                              _user_index = 0;
+                            }
+                          });
+                          _showUserCard(context,_usersList[_user_index]);
+                        }
+                      ),                   
+                    ],
+                  ),                        
+                ],
+              ),
+            ),
+          );
+        }  
+      ),
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15.0),
+          topRight: Radius.circular(15.0),
+        ),
+      ),
+    );    
+  }    
 }
 
