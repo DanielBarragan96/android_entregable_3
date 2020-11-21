@@ -27,8 +27,13 @@ class Results extends HomeState {
 }
 
 class MenuStatsState extends HomeState {
+  final List<Artist> topArtists;
+  final List<Track> topTracks;
+
+  MenuStatsState({@required this.topTracks,@required this.topArtists});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [topTracks,topArtists];
 }
 
 class MenuMapState extends HomeState {

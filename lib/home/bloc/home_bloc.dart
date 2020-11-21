@@ -23,9 +23,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<Artist> topArtists = List();
   List<Track> topTracks = List();
   String SPOTIFY_API_KEY =
-      "BQCDb6qmW6xzakCEG1rf_f8Eb6tpyHdvTzHMJBEFVAgISXjndMT5QFSnk6nZL0jOWWP4CRZ02Owv5ybiq4j5eVAfj5WN2Y8g2HjBBwnAaLH_mP0y_uNYMV40HMKuccenPC6tI0OlfWiZPaRotV5hz9jYzLjQRR6Pqa7Fi8N2BC-k0GrIsJSADQ";
+      "BQBk7Q6coPLplDZnN-Xytl5wzKTOTCE5whsQO21FIw4PHx6QITRq9c_Z9ixHRJMZzkip9fHPrzGw_O_dBiE_INGH5zZWMOQX8WCBqTTXGwcnObppAP-xVxdpxUImJcDEFQexX2CTfHpZIWKHyTx4RsqkpiQ";
 
-  HomeBloc({@required this.loginBloc}) : super(MenuStatsState());
+  HomeBloc({@required this.loginBloc}) : super(MenuMapState());
 
   @override
   Stream<HomeState> mapEventToState(
@@ -42,7 +42,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         yield Results(result: data, chosenImage: img);
       }
     } else if (event is MenuStatsEvent) {
-      yield MenuStatsState();
+      yield MenuStatsState(topTracks: topTracks,topArtists: topArtists);
     } else if (event is MenuMapEvent) {
       yield MenuMapState();
     } else if (event is MenuChatEvent) {
@@ -61,7 +61,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         topArtists.add(Artist(
           artistName: "${artist["name"]}",
         ));
-      // print(topArtists.toString());
+      print(topArtists.toString());
 
       // get tracks stats
       var responseTrack = await getSpotifyTrackStats();
@@ -77,8 +77,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           albumName: "${track["album"]["name"]}",
         ));
       }
-      // print(topTracks.toString());
-      yield MenuStatsState();
+      print(topTracks.toString());
+      yield MenuStatsState(topTracks: topTracks,topArtists: topArtists);
     }
   }
 
