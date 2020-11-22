@@ -3,6 +3,7 @@ import 'package:entregable_2/home/bloc/home_bloc.dart';
 import 'package:entregable_2/home/drawer.dart';
 import 'package:entregable_2/map/menu_map_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -27,7 +28,19 @@ class _MapPageState extends State<MapPage> {
   GoogleMapController _mapController;
   Position _currentPosition;
   int _user_index = 0;
+  String _darkMapStyle;
   final LatLng _center = const LatLng(20.608160, -103.414496);
+
+  @override
+  void initState() {
+    _loadDarkThemeMap();
+    super.initState();
+  }
+
+  Future _loadDarkThemeMap() async {
+    _darkMapStyle =
+        await rootBundle.loadString('assets/map_styles/map_dark.json');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +169,7 @@ class _MapPageState extends State<MapPage> {
   void _onMapCreated(controller) {
     setState(() {
       _mapController = controller;
+      _mapController.setMapStyle(_darkMapStyle);
     });
   }
 
