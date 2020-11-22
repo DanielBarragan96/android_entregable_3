@@ -23,7 +23,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<Artist> topArtists = List();
   List<Track> topTracks = List();
   String SPOTIFY_API_KEY =
-      "BQB_wJSQ26cO201YXOG6ywHyMMEl5HWA_yJdIsc5xxmWVdgcP6qWNHYpknJ-JhuIQfaoJUZQ6-txYeui9serGnCS4W5BQXO3Nnq3BnOXmw_5ld4i99cJsV2ssMlScQmLdMKRVvINIANLim-xPs9-AdJLuX1yFuWCZAESzqo3GExJnn9_dN4l2Q";
+      "BQCo1KwJqcc79gR6RFdF8uTcYfAsV1dvsGNTogJtBxplV0Q45EqBnxbbsN-9F1QS-d-O21UYvcJN7lhTCNy8gh4oxPrVZkmPVqxfgTpZ8uQUuFqN0nAYgzclHLKByuH6X4008tfn0Kw8STQjG2nHsX6t6LugOyvQQocTUgQ6q_4rP2HapQ3vxg";
 
   HomeBloc({@required this.loginBloc}) : super(MenuMapState());
 
