@@ -194,7 +194,7 @@ class _MapPageState extends State<MapPage> {
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: LatLng(
-            user.coord.latitude,
+            user.coord.latitude - 0.005,
             user.coord.longitude,
           ),
           zoom: 15.0,
@@ -203,6 +203,7 @@ class _MapPageState extends State<MapPage> {
     );
 
     await showModalBottomSheet(
+      backgroundColor: kBlack,
       context: context,
       builder: (context) => StatefulBuilder(builder: (context, setModalState) {
         return Padding(
@@ -223,12 +224,13 @@ class _MapPageState extends State<MapPage> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
+                    color: kWhite,
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 40, horizontal: 120),
                   child: Placeholder(
-                    color: Colors.purple,
+                    color: kMainPurple,
                     fallbackHeight: 128,
                     fallbackWidth: 32,
                   ),
@@ -238,6 +240,7 @@ class _MapPageState extends State<MapPage> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
+                    color: kWhite,
                   ),
                 ),
                 SizedBox(
@@ -248,7 +251,7 @@ class _MapPageState extends State<MapPage> {
                   children: <Widget>[
                     IconButton(
                         iconSize: 50,
-                        color: user.liked ? Colors.red : Colors.purple,
+                        color: user.liked ? Colors.red : kMainPurple,
                         icon: Icon(Icons.favorite),
                         onPressed: () {
                           user.liked = !user.liked;
@@ -262,7 +265,7 @@ class _MapPageState extends State<MapPage> {
                     IconButton(
                         iconSize: 50,
                         icon: Icon(Icons.format_list_bulleted,
-                            color: Colors.purple),
+                            color: kMainPurple),
                         onPressed: () {
                           Navigator.of(context).pop();
                           _showStasCard(context, user);
@@ -272,7 +275,7 @@ class _MapPageState extends State<MapPage> {
                     ),
                     IconButton(
                         iconSize: 50,
-                        icon: Icon(Icons.fast_forward, color: Colors.purple),
+                        icon: Icon(Icons.fast_forward, color: kMainPurple),
                         onPressed: () {
                           Navigator.of(context).pop();
                           setState(() {
@@ -302,6 +305,7 @@ class _MapPageState extends State<MapPage> {
 
   void _showStasCard(BuildContext context, Users user) async {
     await showModalBottomSheet(
+      backgroundColor: kBlack,
       context: context,
       builder: (context) => StatefulBuilder(builder: (context, setModalState) {
         return Padding(
@@ -322,6 +326,7 @@ class _MapPageState extends State<MapPage> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
+                    color: kWhite,
                   ),
                 ),
                 SizedBox(
@@ -350,6 +355,7 @@ class _MapPageState extends State<MapPage> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
+                            color: kWhite,
                           ),
                         ),
                       ],
@@ -377,6 +383,7 @@ class _MapPageState extends State<MapPage> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
+                            color: kWhite,
                           ),
                         ),
                       ],
@@ -391,7 +398,7 @@ class _MapPageState extends State<MapPage> {
                   children: <Widget>[
                     IconButton(
                         iconSize: 50,
-                        color: user.liked ? Colors.red : Colors.purple,
+                        color: user.liked ? Colors.red : kMainPurple,
                         icon: Icon(Icons.favorite),
                         onPressed: () {
                           user.liked = !user.liked;
@@ -404,7 +411,7 @@ class _MapPageState extends State<MapPage> {
                     ),
                     IconButton(
                         iconSize: 50,
-                        icon: Icon(Icons.people, color: Colors.purple),
+                        icon: Icon(Icons.people, color: kMainPurple),
                         onPressed: () {
                           Navigator.of(context).pop();
                           _showUserCard(context, _usersList[_user_index]);
@@ -414,7 +421,7 @@ class _MapPageState extends State<MapPage> {
                     ),
                     IconButton(
                         iconSize: 50,
-                        icon: Icon(Icons.fast_forward, color: Colors.purple),
+                        icon: Icon(Icons.fast_forward, color: kMainPurple),
                         onPressed: () {
                           Navigator.of(context).pop();
                           setState(() {
