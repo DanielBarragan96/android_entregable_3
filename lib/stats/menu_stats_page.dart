@@ -17,11 +17,13 @@ Widget menuStatsPage(HomeBloc _bloc, BuildContext context) {
     length: 2,
     child: Scaffold(
       backgroundColor: kBlack,
-      drawer: DrawerWidget(),
+      drawer: DrawerWidget(
+        bloc: _bloc,
+      ),
       appBar: AppBar(
         title: Text("Stats"),
         bottom: TabBar(
-          tabs: _tabsList,  
+          tabs: _tabsList,
         ),
       ),
       body: BlocProvider(

@@ -16,11 +16,8 @@ class MapPage extends StatefulWidget {
   final HomeBloc bloc;
   final BuildContext context;
 
-  MapPage({
-    Key key,
-    @required this.bloc,
-    @required this.context
-  }) : super(key: key);
+  MapPage({Key key, @required this.bloc, @required this.context})
+      : super(key: key);
 
   @override
   _MapPageState createState() => _MapPageState();
@@ -36,7 +33,9 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBlack,
-      drawer: DrawerWidget(),
+      drawer: DrawerWidget(
+        bloc: widget.bloc,
+      ),
       appBar: AppBar(
         title: Text("Map"),
       ),
@@ -62,15 +61,15 @@ class _MapPageState extends State<MapPage> {
                   FloatingActionButton(
                     backgroundColor: kLightPurple,
                     child: Icon(Icons.people),
-                    onPressed: (){
-                      _showUserCard(context,_usersList[_user_index]);
+                    onPressed: () {
+                      _showUserCard(context, _usersList[_user_index]);
                     },
                   ),
-                  SizedBox(height: 30),                  
+                  SizedBox(height: 30),
                   FloatingActionButton(
                     backgroundColor: kLightPurple,
                     child: Icon(Icons.location_pin),
-                    onPressed: (){
+                    onPressed: () {
                       _getCurrentPosition(context);
                     },
                   ),
@@ -84,11 +83,11 @@ class _MapPageState extends State<MapPage> {
                         subject: "Aqui me encuentro",
                       );
                     },
-                  ),                  
+                  ),
                 ],
               ),
             ),
-          ),          
+          ),
         ],
       ),
       bottomNavigationBar: SizedBox(
@@ -138,8 +137,7 @@ class _MapPageState extends State<MapPage> {
   Future<void> _getCurrentPosition(BuildContext context) async {
     // get current position
     _currentPosition = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high
-    );
+        desiredAccuracy: LocationAccuracy.high);
 
     // move camera
     _mapController.animateCamera(
@@ -174,7 +172,6 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _showUserCard(BuildContext context, Users user) async {
-
     String address = await _getGeolocationAddress(
       Position(latitude: user.coord.latitude, longitude: user.coord.longitude),
     );
@@ -193,96 +190,92 @@ class _MapPageState extends State<MapPage> {
 
     await showModalBottomSheet(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setModalState) {
-          return Padding(
-            padding: EdgeInsets.only(
-              top: 24.0,
-              left: 24,
-              right: 24,
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: Container(
-              child: Column(
-                //mainAxisSize: MainAxisSize.min,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "${user.firstname} " + "${user.lastname}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),                              
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 40, horizontal: 120),
-                    child: Placeholder(
-                      color: Colors.purple,
-                      fallbackHeight: 128,
-                      fallbackWidth: 32,
-                    ),
-                  ),                       
-                  Text(
-                    address,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
+      builder: (context) => StatefulBuilder(builder: (context, setModalState) {
+        return Padding(
+          padding: EdgeInsets.only(
+            top: 24.0,
+            left: 24,
+            right: 24,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Container(
+            child: Column(
+              //mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "${user.firstname} " + "${user.lastname}",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
                   ),
-                  SizedBox(
-                    height: 20,
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 40, horizontal: 120),
+                  child: Placeholder(
+                    color: Colors.purple,
+                    fallbackHeight: 128,
+                    fallbackWidth: 32,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      IconButton(
+                ),
+                Text(
+                  address,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    IconButton(
                         iconSize: 50,
-                        color: user.liked? Colors.red:Colors.purple,
+                        color: user.liked ? Colors.red : Colors.purple,
                         icon: Icon(Icons.favorite),
-                        onPressed: (){
+                        onPressed: () {
                           user.liked = !user.liked;
                           setState(() {});
                           Navigator.of(context).pop();
-                          _showUserCard(context,_usersList[_user_index]);                
-                        }
-                      ),   
-                      SizedBox(
-                        width: 20,
-                      ),
-                      IconButton(
+                          _showUserCard(context, _usersList[_user_index]);
+                        }),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    IconButton(
                         iconSize: 50,
-                        icon: Icon(Icons.format_list_bulleted,color:Colors.purple),
-                        onPressed: (){
+                        icon: Icon(Icons.format_list_bulleted,
+                            color: Colors.purple),
+                        onPressed: () {
                           Navigator.of(context).pop();
-                          _showStasCard(context,user); 
-                        }
-                      ),                         
-                      SizedBox(
-                        width: 20,
-                      ),                                                                   
-                      IconButton(
+                          _showStasCard(context, user);
+                        }),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    IconButton(
                         iconSize: 50,
-                        icon: Icon(Icons.fast_forward,color:Colors.purple),
-                        onPressed: (){
+                        icon: Icon(Icons.fast_forward, color: Colors.purple),
+                        onPressed: () {
                           Navigator.of(context).pop();
-                          setState((){                            
+                          setState(() {
                             _user_index++;
-                            if(_user_index == _usersList.length-1){
+                            if (_user_index == _usersList.length - 1) {
                               _user_index = 0;
                             }
                           });
-                          _showUserCard(context,_usersList[_user_index]);
-                        }
-                      ),                   
-                    ],
-                  ),                        
-                ],
-              ),
+                          _showUserCard(context, _usersList[_user_index]);
+                        }),
+                  ],
+                ),
+              ],
             ),
-          );
-        }  
-      ),
+          ),
+        );
+      }),
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -290,147 +283,141 @@ class _MapPageState extends State<MapPage> {
           topRight: Radius.circular(15.0),
         ),
       ),
-    );    
+    );
   }
 
   void _showStasCard(BuildContext context, Users user) async {
-
     await showModalBottomSheet(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setModalState) {
-          return Padding(
-            padding: EdgeInsets.only(
-              top: 24.0,
-              left: 24,
-              right: 24,
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: Container(
-              child: Column(
-                //mainAxisSize: MainAxisSize.min,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "${user.firstname} " + "${user.lastname}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ), 
-                  SizedBox(
-                    height: 50,
+      builder: (context) => StatefulBuilder(builder: (context, setModalState) {
+        return Padding(
+          padding: EdgeInsets.only(
+            top: 24.0,
+            left: 24,
+            right: 24,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Container(
+            child: Column(
+              //mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "${user.firstname} " + "${user.lastname}",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget> [
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget> [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                user.imgsong,
-                                fit: BoxFit.fill,
-                                width: 140,
-                                height: 140,
-                              ),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.network(
+                            user.imgsong,
+                            fit: BoxFit.fill,
+                            width: 140,
+                            height: 140,
                           ),
-                          SizedBox(
-                            height: 20,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "${user.favsong}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
                           ),
-                          Text(
-                            "${user.favsong}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ), 
-                        ],
-                      ),
-                      SizedBox(
-                        width: 40,
-                      ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget> [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                user.imgartist,
-                                fit: BoxFit.fill,
-                                width: 140,
-                                height: 140,
-                              ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 40,
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.network(
+                            user.imgartist,
+                            fit: BoxFit.fill,
+                            width: 140,
+                            height: 140,
                           ),
-                          SizedBox(
-                            height: 20,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "${user.favartist}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
                           ),
-                          Text(
-                            "${user.favartist}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),                           
-                        ],
-                      ),                      
-                    ],
-                  ),   
-                  SizedBox(
-                    height: 50,
-                  ),                                    
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      IconButton(
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    IconButton(
                         iconSize: 50,
-                        color: user.liked? Colors.red:Colors.purple,
+                        color: user.liked ? Colors.red : Colors.purple,
                         icon: Icon(Icons.favorite),
-                        onPressed: (){
+                        onPressed: () {
                           user.liked = !user.liked;
                           setState(() {});
                           Navigator.of(context).pop();
-                          _showUserCard(context,_usersList[_user_index]);                
-                        }
-                      ),   
-                      SizedBox(
-                        width: 20,
-                      ),
-                      IconButton(
+                          _showUserCard(context, _usersList[_user_index]);
+                        }),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    IconButton(
                         iconSize: 50,
-                        icon: Icon(Icons.people,color:Colors.purple),
-                        onPressed: (){
+                        icon: Icon(Icons.people, color: Colors.purple),
+                        onPressed: () {
                           Navigator.of(context).pop();
-                          _showUserCard(context,_usersList[_user_index]);                            
-                        }
-                      ),                         
-                      SizedBox(
-                        width: 20,
-                      ),                                                                   
-                      IconButton(
+                          _showUserCard(context, _usersList[_user_index]);
+                        }),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    IconButton(
                         iconSize: 50,
-                        icon: Icon(Icons.fast_forward,color:Colors.purple),
-                        onPressed: (){
+                        icon: Icon(Icons.fast_forward, color: Colors.purple),
+                        onPressed: () {
                           Navigator.of(context).pop();
-                          setState((){                            
+                          setState(() {
                             _user_index++;
-                            if(_user_index == _usersList.length-1){
+                            if (_user_index == _usersList.length - 1) {
                               _user_index = 0;
                             }
                           });
-                          _showUserCard(context,_usersList[_user_index]);
-                        }
-                      ),                   
-                    ],
-                  ),                        
-                ],
-              ),
+                          _showUserCard(context, _usersList[_user_index]);
+                        }),
+                  ],
+                ),
+              ],
             ),
-          );
-        }  
-      ),
+          ),
+        );
+      }),
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -438,7 +425,6 @@ class _MapPageState extends State<MapPage> {
           topRight: Radius.circular(15.0),
         ),
       ),
-    );    
-  }    
+    );
+  }
 }
-

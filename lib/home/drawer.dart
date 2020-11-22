@@ -1,7 +1,9 @@
 import 'package:entregable_2/colors.dart';
 import 'package:entregable_2/home/bloc/home_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DrawerWidget extends StatefulWidget {
   final HomeBloc bloc;
@@ -26,6 +28,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   Widget build(BuildContext context) {
     return Drawer(
       child: Scaffold(
+        backgroundColor: kBlack,
         appBar: AppBar(
           title: Text(""),
         ),
@@ -58,23 +61,24 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     style: Theme.of(context)
                         .textTheme
                         .headline4
-                        .copyWith(color: Colors.black),
+                        .copyWith(color: kWhite),
                   ),
                   SizedBox(
                     height: 8,
                   ),
-                  Text("${_user.email}"),
+                  Text(
+                    "${_user.email}",
+                    style: TextStyle(color: kLightGray),
+                  ),
                   SizedBox(
                     height: 16,
                   ),
                   ListTile(
-                    title: Text("Ajustes"),
-                    leading: Icon(Icons.settings),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    title: Text("Spotify stats"),
-                    leading: Icon(Icons.settings),
+                    title: Text(
+                      "Update Spotify stats",
+                      style: TextStyle(color: kWhite),
+                    ),
+                    leading: FaIcon(FontAwesomeIcons.spotify, color: kWhite),
                     onTap: () {
                       widget.bloc.add(LoadSpotifyStatsEvent());
                     },
@@ -88,7 +92,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   children: <Widget>[
                     Expanded(
                       child: RaisedButton(
-                        child: Text("Log out"),
+                        color: kMainPurple,
+                        child: Text(
+                          "Log out",
+                          style: TextStyle(color: kWhite),
+                        ),
                         onPressed: () {
                           if (widget.bloc != null) {
                             return widget.bloc.logout();
