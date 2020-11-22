@@ -21,6 +21,7 @@ class _MyAppState extends State<MyApp> {
       title: "Proyecto final",
       theme: ThemeData(
         primaryColor: kMainPurple,
+        accentColor: kLightPurple,
       ),
       home: LoginPage(),
     );
